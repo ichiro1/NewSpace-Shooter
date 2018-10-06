@@ -9,13 +9,20 @@ public class WordManager : MonoBehaviour {
 	public WordSpawner wordSpawner;
 
 	private bool hasActiveWord;
-	private Word activeWord;
-
-
-	public void Start() {
+	Word activeWord;
+    public Word active;
+    public bool shoot;
+     
+    public void Start() {
 		AddWord();
-	}
-	public void AddWord ()
+       
+    }
+    public void Update()
+    {
+        active = activeWord;
+       
+    }
+    public void AddWord ()
 	{
 		Word word = new Word(WordGenerator.GetRandomWord(), wordSpawner.SpawnWord());
 		Debug.Log(word.word);
@@ -30,7 +37,9 @@ public class WordManager : MonoBehaviour {
 			if (activeWord.GetNextLetter() == letter)
 			{
 				activeWord.TypeLetter();
-			}
+
+
+            }
 		} else
 		{
 			foreach(Word word in words)
@@ -47,10 +56,15 @@ public class WordManager : MonoBehaviour {
 
 		if (hasActiveWord && activeWord.WordTyped())
 		{
+            shoot = true;
 			hasActiveWord = false;
 			words.Remove(activeWord);
 			AddWord();
+            
 		}
+        else{
+            shoot = false;
+        }
 	}
 
 }

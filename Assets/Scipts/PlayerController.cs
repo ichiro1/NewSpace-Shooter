@@ -16,21 +16,50 @@ using UnityEngine;
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
-    
+
     private float nextFire;
-    
+    public GameObject theWord;
+    public WordManager WordManagerScript;
+    public bool shoot;
+    GameObject[] player;
+
     void Start () {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+        theWord = GameObject.Find("WordManager");
+        WordManagerScript = theWord.GetComponent<WordManager>();
+       player= GameObject.FindGameObjectsWithTag("Player");
     }
-    
-    
+
+
     void Update () {
-        if (Input.GetButton("Fire1") && Time.time > nextFire) {
-            nextFire = Time.time + fireRate;
-            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-            audioSource.Play ();
+        shoot = WordManagerScript.shoot;
+        if (Input.GetButton("Fire1") && Time.time > nextFire || shoot == true) {
+            foreach (GameObject ship in player)
+            {
+
+                nextFire = Time.time + fireRate;
+                if (ship)
+                {
+                    Instantiate(shot, ship.transform.position, ship.transform.rotation);
+                }
+                audioSource.Play();
+
+
+
+                WordManagerScript.shoot = false;
+            }
         }
+
+        //if(shoot == true) {
+        //    nextFire = Time.time + fireRate;
+        //    Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        //    audioSource.Play ();
+
+        //    WordManagerScript.shoot = false;
+        //}
+
+
     }
     
     void FixedUpdate () {
